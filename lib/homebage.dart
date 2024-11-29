@@ -1,14 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:gym_app/Components/line_chart.dart';
+import 'package:gym_app/Components/pie_chart.dart';
+import 'package:gym_app/Model/app_database.dart';
 import 'package:gym_app/Model/Workout.dart';
 import 'package:gym_app/workout_page.dart';
+import 'package:flutter/material.dart';
 import 'package:gym_app/profile.dart';
+import 'package:get/get.dart';
 
-class Homebage extends StatelessWidget {
-  const Homebage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    double phoneWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 31, 27, 27),
       body: Padding(
@@ -17,7 +23,49 @@ class Homebage extends StatelessWidget {
           child: ListView(
             children: [
               welcomeprofilepic(context),
-              graphcontainer(),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 18.0),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 225.0,
+                    viewportFraction: 1,
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 5),
+                  ),
+                  items: [1, 2, 3, 4, 5].map((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            decoration: BoxDecoration(
+                                color: i == 3
+                                    ? Colors.grey.shade900
+                                    : i == 1
+                                        ? Colors.grey.shade900
+                                        : Colors.red.shade900.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: i == 3
+                                ? _buildGraph(phoneWidth)
+                                : i == 1
+                                    ? _buildPieChart(phoneWidth)
+                                    : const Center(
+                                        child: Text(
+                                          'Advertizment',
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white10),
+                                        ),
+                                      ));
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+
+              // graphcontainer(),
+
               trainingcenter(),
               _workoutBox(
                   imagePath: "assets/Rectangle 39_m_vertical.png",
@@ -58,6 +106,66 @@ class Homebage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildGraph(phoneWidth) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white10,
+      ),
+      // padding: EdgeInsets.only(top: 10),
+      width: phoneWidth - 24,
+      child: const Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 10.0, left: 10),
+            child: Text(
+              "Total Recorded Sets",
+              style: TextStyle(fontSize: 16, color: Colors.white54),
+            ),
+          ),
+          Center(child: LineChartSample2()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPieChart(phoneWidth) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white10,
+      ),
+      // padding: EdgeInsets.only(top: 10),
+      width: phoneWidth - 24,
+      child: const Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 25.0, left: 200),
+                child: Text(
+                  "Muscle Group",
+                  style: TextStyle(fontSize: 17, color: Colors.white54),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 0.0, left: 170),
+                child: Text(
+                  "Percentage",
+                  style: TextStyle(fontSize: 17, color: Colors.white54),
+                ),
+              ),
+            ],
+          ),
+          Center(child: PieChartSample2()),
+        ],
       ),
     );
   }
@@ -182,34 +290,44 @@ class Homebage extends StatelessWidget {
       required String workoutName,
       required String description,
       required int index}) {
-    List<TestWorkout> defultWorkouts = [
-      TestWorkout(
-          name: "Full Body",
-          date: DateTime.now(),
-          workoutId: '6ec67f50-e0a7-484a-837c-c60fe6a01a03',
-          id: '0ace0199-db3f-4d39-99dd-b70aa023b632'),
-      TestWorkout(
-          name: "Cardio",
-          date: DateTime.now(),
-          workoutId: '9732dbfd-448a-496a-955c-ba1aa2f6cf19',
-          id: 'bd338922-7521-4f27-a1dd-331bc2f7cd02'),
-      TestWorkout(
-          name: "Arm Day",
-          date: DateTime.now(),
-          workoutId: '608818e9-f59a-4a2d-a0e1-65465e626470',
-          id: '1758d355-2be9-4649-b227-1bee9afde1b0'),
-      TestWorkout(
-          name: "Leg Day",
-          date: DateTime.now(),
-          workoutId: '608818e9-f59a-4a2d-a0e1-65465e626470',
-          id: 'e2baf113-cb19-42cb-aa0e-86dcd3777890'),
-    ];
+    // List<TestWorkout> defultWorkouts = [
+    //   TestWorkout(
+    //       name: "Full Body",
+    //       date: DateTime.now(),
+    //       workoutId: '6ec67f50-e0a7-484a-837c-c60fe6a01a03',
+    //       id: '0ace0199-db3f-4d39-99dd-b70aa023b632'),
+    //   TestWorkout(
+    //       name: "Cardio",
+    //       date: DateTime.now(),
+    //       workoutId: '9732dbfd-448a-496a-955c-ba1aa2f6cf19',
+    //       id: 'bd338922-7521-4f27-a1dd-331bc2f7cd02'),
+    //   TestWorkout(
+    //       name: "Arm Day",
+    //       date: DateTime.now(),
+    //       workoutId: '608818e9-f59a-4a2d-a0e1-65465e626470',
+    //       id: '1758d355-2be9-4649-b227-1bee9afde1b0'),
+    //   TestWorkout(
+    //       name: "Leg Day",
+    //       date: DateTime.now(),
+    //       workoutId: '608818e9-f59a-4a2d-a0e1-65465e626470',
+    //       id: 'e2baf113-cb19-42cb-aa0e-86dcd3777890'),
+    // ];
+
+    final newWorkout = TestWorkout(name: workoutName, date: DateTime.now());
+    Future<TestWorkout> createWorkout() async {
+      final workoutDatabase = WorkoutDatabase();
+
+      // Creat new workout
+      workoutDatabase.creatWorkoutTest(newWorkout);
+      return newWorkout;
+    }
 
     return Column(
       children: [
         GestureDetector(
           onTap: () {
-            Get.to(() => WorkoutPage(workout: defultWorkouts[index]));
+            createWorkout();
+            Get.to(() => WorkoutPage(workout: newWorkout));
           },
           child: Stack(
             children: [

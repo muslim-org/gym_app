@@ -10,7 +10,7 @@ class NavigationController extends GetxController {
   int currentTap = 0;
 
   List<Widget> pages = const [
-    Homebage(),
+    HomePage(),
     StatsPage(),
     HistoryPage(),
     Profile()

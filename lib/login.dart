@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gym_app/Navigation.dart';
-import 'package:gym_app/homebage.dart';
 import 'package:gym_app/signup.dart';
 
 class Login extends StatelessWidget {
@@ -111,7 +110,7 @@ class Login extends StatelessWidget {
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(
-                    //         builder: (context) => const Homebage()));
+                    //         builder: (context) => const HomePage()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 0, 255, 213),
